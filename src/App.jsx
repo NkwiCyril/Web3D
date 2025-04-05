@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// Import the three library
+
+// 1. Create the scene
+
+// 2. Add the camera
+
+// 3. Create and add a cube object
+
+// 4. Add lighting
+
+// 5. Setup the renderer
+
+// 6. Animate the scene
+
+import * as THREE from "three";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+
+  const geometry = new THREE.BoxGeometry();
+  const material = new THREE.MeshLambertMaterial({
+    color: "#468585",
+    emissive: "#468585",
+  });
+  const cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+
+  const light = new THREE.DirectionalLight(0xffffff, 10);
+  light.position.set(5, 5, 5);
+  scene.add(light);
+
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  function animate() {
+    requestAnimationFrame(animate);
+    cube.rotation.y += 0.01;
+    cube.rotation.x += 0.01;
+    renderer.render(scene, camera);
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {(() => {
+        camera.position.z = 5;
+        animate();
+      })()}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
